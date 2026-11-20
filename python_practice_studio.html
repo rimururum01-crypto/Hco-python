@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python Practice Studio — 6 bài thực hành</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<style>
+:root{--bg:#eef2f6;--surface:#fff;--surface2:#f7f9fb;--line:#dce3eb;--text:#172b40;--muted:#718096;--blue:#1976d2;--blue-soft:#eaf3fc;--green:#16865d;--red:#c44d4d;--dark:#17212d;--dark2:#202d3b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 Inter,"Segoe UI",Arial,sans-serif}
+button{font:inherit;cursor:pointer;border:0}header{height:58px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:10}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}.brandmark{width:30px;height:30px;border-radius:9px;background:#176fbd;color:white;display:grid;place-items:center;font-weight:900}.brand small{display:block;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.08em}
+.header-right{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px}.online{width:7px;height:7px;background:#25a36f;border-radius:50%;display:inline-block;margin-right:5px}
+.app{height:calc(100vh - 58px);min-height:680px;display:grid;grid-template-columns:252px minmax(360px, .95fr) minmax(420px,1.05fr);gap:0}
+.sidebar{background:#fff;border-right:1px solid var(--line);padding:18px 12px;overflow:auto}.side-label{font-size:10px;letter-spacing:.12em;color:#91a0af;font-weight:800;padding:5px 10px 9px}.lesson-nav{display:flex;align-items:flex-start;gap:10px;width:100%;padding:10px;border-radius:9px;background:transparent;color:var(--text);text-align:left;margin:2px 0}.lesson-nav:hover{background:#f4f7fa}.lesson-nav.active{background:var(--blue-soft);color:#075ea8}.lesson-no{flex:0 0 25px;height:25px;border-radius:7px;background:#edf1f5;color:#617387;display:grid;place-items:center;font-size:11px;font-weight:800}.lesson-nav.active .lesson-no{background:#d3e8fa;color:#075ea8}.lesson-name{font-size:12px;line-height:1.35;font-weight:650;padding-top:3px}.lesson-nav.done .lesson-no{background:#e3f4ec;color:var(--green)}
+.side-progress{margin:22px 10px 8px;border-top:1px solid var(--line);padding-top:15px}.progress-line{height:5px;background:#edf1f5;border-radius:9px;overflow:hidden;margin:9px 0}.progress-line i{display:block;width:0;height:100%;background:var(--green)}.progress-caption{font-size:11px;color:var(--muted)}
+.content{min-width:0;overflow:auto;padding:23px 24px 40px;background:var(--bg)}.crumb{font-size:11px;color:var(--muted);margin-bottom:14px}.crumb b{color:#31516e}.title-row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.title-row h1{font-size:23px;line-height:1.25;margin:0 0 7px;letter-spacing:-.02em}.subtitle{color:var(--muted);font-size:12px}.level{white-space:nowrap;background:#e8f2fb;color:#1769ad;border-radius:20px;padding:5px 9px;font-size:10px;font-weight:800}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:22px 0 17px}.tab{padding:9px 13px;background:transparent;color:var(--muted);font-size:12px;font-weight:700;border-bottom:2px solid transparent}.tab.active{color:var(--blue);border-color:var(--blue)}
+.panel{display:none}.panel.active{display:block}.paper{background:#fff;border:1px solid var(--line);border-radius:12px;padding:19px 20px;box-shadow:0 3px 12px #263d5307}.paper h2{font-size:14px;margin:0 0 13px}.paper p{margin:0 0 11px}.paper ol,.paper ul{padding-left:21px;margin:8px 0 13px}.paper li{margin:5px 0}.example{background:#f6f8fa;border:1px solid #e5ebf0;border-radius:8px;padding:12px 14px;margin:12px 0;font-size:12px}.example pre{margin:6px 0 0;white-space:pre-wrap;font:12px/1.55 Consolas,monospace;color:#31465b}.note{border-left:3px solid #4c9ad9;background:#eef6fc;padding:11px 13px;border-radius:0 8px 8px 0;font-size:12px;margin-top:14px}.guide-step{padding:12px 0;border-bottom:1px solid #edf1f4}.guide-step:last-child{border:0}.guide-step b{font-family:Consolas,monospace;font-size:12px;color:#1769ad}.guide-step p{margin:4px 0 0;color:var(--muted);font-size:12px}.challenge{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}.challenge h2{font-size:14px;margin:0 0 7px}.challenge p{font-size:12px;color:var(--muted);margin:0 0 12px}.checkline{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #eef1f4;font-size:12px}.checkline:last-child{border:0}.checkline input{margin-top:3px;accent-color:var(--blue)}
+/* IDE */
+.ide{background:var(--dark);color:#dbe6f1;display:flex;flex-direction:column;min-width:0;overflow:hidden}.ide-top{height:52px;flex:0 0 52px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #304052;background:#1c2835}.filetab{height:52px;display:flex;align-items:center;gap:8px;padding:0 13px;border-bottom:2px solid #42a5f5;font-size:12px;color:#eaf3fb}.py-icon{color:#ffd36a;font-weight:900}.ide-actions{display:flex;gap:7px;align-items:center}.icon-btn{background:#2a3949;color:#c6d3df;border:1px solid #3b4b5c;border-radius:7px;padding:6px 9px;font-size:11px}.run-btn{background:#16865d;color:#fff;border-radius:7px;padding:7px 12px;font-size:11px;font-weight:800}.run-btn:disabled{opacity:.5}
+.editor-wrap{flex:1;min-height:240px;overflow:auto;background:#202d3b}.CodeMirror{height:100%;min-height:240px;font:13px/1.65 Consolas,"Courier New",monospace;background:#202d3b;color:#d9e3ed}.CodeMirror-gutters{background:#202d3b;border-right:1px solid #354454}.CodeMirror-linenumber{color:#718397}.CodeMirror-cursor{border-left:2px solid #fff}.CodeMirror-selected{background:#36516c!important}
+.ide-bottom{height:235px;flex:0 0 235px;border-top:1px solid #354454;background:#17212d;display:flex;flex-direction:column}.console-tabs{height:37px;flex:0 0 37px;display:flex;align-items:center;gap:18px;padding:0 15px;border-bottom:1px solid #304052}.console-tabs span{font-size:10px;color:#8294a7;font-weight:800;letter-spacing:.08em}.console-tabs .selected{color:#e0ebf5;border-bottom:2px solid #42a5f5;height:37px;display:flex;align-items:center}.console-tools{margin-left:auto;display:flex;gap:6px}.console-tools button{background:transparent;color:#91a2b4;font-size:10px;padding:4px 6px}.console-body{padding:12px 15px;overflow:auto;flex:1;font:12px/1.6 Consolas,monospace;color:#c5d5e4;white-space:pre-wrap}.console-body .muted{color:#71869b}.console-body .err{color:#ff9292}.console-body .ok{color:#6fd3a5}.statusbar{height:24px;flex:0 0 24px;background:#1267a9;color:#eaf5ff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:10px}
+@media(max-width:1050px){.app{grid-template-columns:210px minmax(330px,1fr)}.ide{grid-column:2;min-height:620px}.content{grid-column:2}.sidebar{grid-row:1 / span 2}.app{height:auto;min-height:calc(100vh - 58px)}}
+@media(max-width:680px){header{padding:0 13px}.header-right .hide-mobile{display:none}.app{display:flex;flex-direction:column;height:auto}.sidebar{border-right:0;border-bottom:1px solid var(--line);padding:10px;position:static}.side-label{padding:4px 7px}.sidebar .lesson-list{display:flex;overflow-x:auto;gap:5px;padding-bottom:4px}.lesson-nav{min-width:160px;width:160px;margin:0;padding:8px}.side-progress{display:none}.content{padding:17px 13px 22px;overflow:visible}.title-row h1{font-size:20px}.ide{min-height:590px;height:75vh;max-height:780px}.ide-bottom{height:210px;flex-basis:210px}.level{font-size:9px}}
+</style></head>
+<body>
+<header><div class="brand"><div class="brandmark">Py</div><div>Python Practice Studio<small>LEARN · WRITE · RUN</small></div></div><div class="header-right"><span><i class="online"></i>Workspace sẵn sàng</span><span class="hide-mobile">6 bài thực hành · Python cơ bản</span></div></header>
+<div class="app">
+<aside class="sidebar"><div class="side-label">DANH SÁCH BÀI TẬP</div><div class="lesson-list" id="lessonList"></div><div class="side-progress"><div class="side-label" style="padding:0">TIẾN ĐỘ CỦA BẠN</div><div class="progress-line"><i id="progress"></i></div><div class="progress-caption" id="progressText">0/6 bài hoàn thành</div></div></aside>
+<main class="content">
+<div class="crumb">Workspace <span>›</span> <b id="crumb">Bài 01</b></div>
+<div class="title-row"><div><h1 id="lessonTitle"></h1><div class="subtitle" id="lessonSub"></div></div><span class="level" id="level"></span></div>
+<div class="tabs"><button class="tab active" data-tab="problem">Đề bài</button><button class="tab" data-tab="guide">Hướng dẫn</button><button class="tab" data-tab="practice">Tự luyện</button></div>
+<section class="panel active" id="problem"></section><section class="panel" id="guide"></section><section class="panel" id="practice"></section>
+</main>
+<section class="ide">
+<div class="ide-top"><div class="filetab"><span class="py-icon">◆</span><span id="filename">bai_01.py</span><span style="color:#8a9bad">●</span></div><div class="ide-actions"><button class="icon-btn" id="reset">↶ Đặt lại</button><button class="icon-btn" id="copy">Sao chép</button><button class="run-btn" id="run">▶ Chạy Python</button></div></div>
+<div class="editor-wrap"><textarea id="code" spellcheck="false"></textarea></div>
+<div class="ide-bottom"><div class="console-tabs"><span class="selected">TERMINAL</span><span>OUTPUT</span><div class="console-tools"><button id="sample">Dữ liệu mẫu</button><button id="clear">Xóa kết quả</button></div></div><div class="console-body" id="console"><span class="muted"># Kết quả chạy chương trình sẽ hiển thị tại đây.</span><br><span class="muted"># Nhấn “Chạy Python” để bắt đầu.</span></div></div>
+<div class="statusbar"><span id="runStatus">Python · Chưa chạy</span><span>UTF-8&nbsp;&nbsp; Spaces: 4&nbsp;&nbsp; <span id="lineCount">Ln 1</span></span></div>
+</section>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+<script>
+const lessons = [
+{
+title:"Tính tiền điện cho một dãy hộ dân",sub:"Câu 1 · Tính tiền điện theo bậc thang",level:"VÒNG LẶP · ĐIỀU KIỆN",
+statement:`CÂU 1 (5,0 điểm) – Tính tiền điện cho một dãy hộ dân
+
+Viết chương trình nhập số hộ dân (n). Nếu nhập vào không phải số nguyên hoặc số hộ nhỏ hơn hoặc bằng 0 thì in thông báo “Dữ liệu không hợp lệ, vui lòng nhập lại!” và yêu cầu nhập lại.
+
+Nhập số hộ n. Sau đó nhập số điện tiêu thụ (kWh, số nguyên) của từng hộ. Giá 50 kWh đầu là 1.800 đồng/kWh; từ kWh thứ 51 đến 100 giá 2.000 đồng/kWh; từ kWh thứ 101 trở đi là 2.500 đồng/kWh.
+
+Tính tiền điện từng hộ, cuối cùng in tổng tiền cả lô, hộ trả nhiều nhất (thứ tự hộ và số tiền) và số hộ dùng trên 100 kWh.
+
+Ví dụ (giá trị sau dấu hai chấm là dữ liệu người dùng gõ):
+Số hộ: abc
+Dữ liệu không hợp lệ, vui lòng nhập lại!
+Số hộ: 2
+Số điện hộ 1 (kWh): 40
+Tiền điện hộ 1: 72,000 đồng
+Số điện hộ 2 (kWh): 120
+Tiền điện hộ 2: 240,000 đồng
+Tổng tiền cả lô: 312,000 đồng
+Hộ trả nhiều nhất: hộ 2 - 240,000 đồng
+Số hộ dùng trên 100 kWh: 1`,
+brief:["Nhập số hộ; dữ liệu không hợp lệ thì yêu cầu nhập lại.","Nhập số kWh của từng hộ và tính tiền theo 3 bậc.","In tiền từng hộ, tổng tiền cả lô, hộ trả nhiều nhất và số hộ dùng trên 100 kWh."],
+idea:"Tách số điện thành từng phần: tối đa 50 kWh đầu, 50 kWh tiếp theo và phần vượt 100 kWh. Dùng for để duyệt từng hộ; dùng biến tổng, biến lớn nhất và biến đếm.",
+code:`def nhap_so_ho():
+    while True:
+        try:
+            n = int(input("So ho: "))
+            if n > 0:
+                return n
+        except ValueError:
+            pass
+        print("Du lieu khong hop le, vui long nhap lai!")
+
+
+n = nhap_so_ho()
+tong_tien = 0
+max_tien = -1
+ho_max = 0
+dem = 0
+
+for i in range(1, n + 1):
+    dien = int(input("So dien ho %d (kWh): " % i))
+
+    if dien <= 50:
+        tien = dien * 1800
+    elif dien <= 100:
+        tien = 50 * 1800 + (dien - 50) * 2000
+    else:
+        tien = 50 * 1800 + 50 * 2000 + (dien - 100) * 2500
+
+    print("Tien dien ho", i, ":", format(tien, ",d"), "dong")
+    tong_tien += tien
+
+    if tien > max_tien:
+        max_tien = tien
+        ho_max = i
+    if dien > 100:
+        dem += 1
+
+print("Tong tien ca lo:", format(tong_tien, ",d"), "dong")
+print("Ho tra nhieu nhat: ho", ho_max, "-", format(max_tien, ",d"), "dong")
+print("So ho dung tren 100 kWh:", dem)`,
+inputs:"2\n40\n120",files:null,
+guide:[["def nhap_so_ho():","Tạo hàm nhập số hộ và bắt lỗi nếu nhập chữ hoặc số không hợp lệ."],["for i in range(1, n + 1):","Lặp qua từng hộ dân."],["if dien <= 50 / elif dien <= 100 / else","Chọn bậc giá điện tương ứng."],["tong_tien += tien","Cộng dồn tiền điện của tất cả hộ."],["if tien > max_tien","Cập nhật hộ trả nhiều tiền nhất."],["dem += 1","Đếm hộ sử dụng trên 100 kWh."]],
+quiz:[["120 kWh phải trả bao nhiêu?",["240.000 đồng","300.000 đồng","312.000 đồng"],0,"50×1.800 + 50×2.000 + 20×2.500 = 240.000."],["Lệnh nào dùng để cộng dồn?",["tong = tien","tong += tien","tong == tien"],1,"+= cộng giá trị mới vào tổng hiện tại."]]
+},
+{
+title:"Xét điều kiện dự thi từ tệp điểm danh",sub:"Câu 2 · Đọc dữ liệu và ghi danh sách cấm thi",level:"ĐỌC TỆP · DANH SÁCH",
+statement:`CÂU 2 (5,0 điểm) – Xét điều kiện dự thi từ tệp điểm danh
+
+Tệp DiemDanh.txt có mỗi dòng dạng MaSV;HoTen;SoBuoiVang (ví dụ SV101;Nguyen Minh Anh;0). Sinh viên vắng quá 3 buổi bị cấm thi.
+
+Đọc tệp, in tổng số buổi vắng của cả lớp. Ghi các sinh viên bị cấm thi vào tệp CamThi.txt, mỗi người một dòng giữ nguyên định dạng như tệp gốc; dòng cuối ghi Tong so: k (k là số sinh viên bị cấm thi).
+
+Nếu không tìm thấy tệp DiemDanh.txt, in thông báo rõ ràng và kết thúc chương trình.
+
+Ví dụ với tệp mẫu (rút gọn):
+[Màn hình]
+Tổng số buổi vắng của cả lớp: 30
+
+[CamThi.txt]
+SV102;Tran Quoc Bao;5
+SV104;Pham Van Dat;4
+...
+Tong so: 4`,
+brief:["Mỗi dòng trong DiemDanh.txt có dạng MaSV;HoTen;SoBuoiVang.","Sinh viên vắng quá 3 buổi bị cấm thi.","In tổng số buổi vắng; ghi các sinh viên bị cấm vào CamThi.txt và dòng cuối ghi tổng số bị cấm.","Nếu không tìm thấy tệp, thông báo rõ ràng và kết thúc."],
+idea:"Mở tệp ở chế độ đọc. Duyệt từng dòng, strip() rồi split(';'). Chuyển số buổi vắng thành int, cộng tổng và đưa dòng vi phạm vào danh sách. Cuối cùng mở tệp kết quả ở chế độ ghi.",
+code:`try:
+    f = open("DiemDanh.txt", "r", encoding="utf-8")
+except FileNotFoundError:
+    print("Khong tim thay tep DiemDanh.txt")
+    raise SystemExit
+
+ds_cam = []
+tong_vang = 0
+
+for dong in f:
+    dong = dong.strip()
+    ma, ten, vang = dong.split(";")
+    vang = int(vang)
+    tong_vang += vang
+
+    if vang > 3:
+        ds_cam.append(dong)
+
+f.close()
+
+print("Tong so buoi vang cua ca lop:", tong_vang)
+
+f = open("CamThi.txt", "w", encoding="utf-8")
+for sv in ds_cam:
+    f.write(sv + "\\n")
+f.write("Tong so: " + str(len(ds_cam)))
+f.close()`,
+inputs:"",files:{"DiemDanh.txt":"SV101;Nguyen Minh Anh;0\nSV102;Tran Quoc Bao;5\nSV103;Le Van Cuong;2\nSV104;Pham Van Dat;4"},
+guide:[["open('DiemDanh.txt', 'r')","Mở tệp để đọc."],["dong.strip()","Loại bỏ ký tự xuống dòng ở cuối dòng."],["dong.split(';')","Tách mã sinh viên, họ tên và số buổi vắng."],["ds_cam.append(dong)","Thêm nguyên dòng vào danh sách sinh viên bị cấm."],["open('CamThi.txt', 'w')","Mở hoặc tạo tệp kết quả để ghi."],["len(ds_cam)","Lấy số sinh viên bị cấm thi."]],
+quiz:[["Điều kiện bị cấm thi là gì?",["vang >= 3","vang > 3","vang < 3"],1,"Đề ghi vắng quá 3 buổi, nghĩa là lớn hơn 3."],["Lệnh tách chuỗi theo dấu chấm phẩy?",["split(';')","strip(';')","append(';')"],0,"split(';') chia chuỗi thành các trường dữ liệu."]]
+},
+{
+title:"Mô phỏng máy ATM",sub:"Câu 1 · Kiểm tra PIN và thực hiện giao dịch",level:"WHILE · BREAK · KIỂM TRA",
+statement:`CÂU 1 (5,0 điểm) – Xây dựng mô phỏng máy ATM
+
+Viết chương trình mô phỏng máy ATM có số dư ban đầu 5.000.000 đồng, mã PIN đúng là 2408. Người dùng được nhập PIN tối đa 3 lần; nếu sai cả 3 lần thì thông báo khóa thẻ và kết thúc.
+
+Nếu đúng PIN, cho phép rút tiền nhiều lần. Mỗi lần nhập số tiền cần rút, nhập 0 để kết thúc. Số tiền rút phải chia hết cho 50.000 và không vượt quá số dư; nếu không thì báo lý do và cho nhập lại.
+
+Mỗi lần rút thành công, trừ số tiền khỏi số dư còn lại và in số dư. Khi kết thúc, in số giao dịch thành công và số dư cuối cùng.
+
+Ví dụ (giá trị sau dấu hai chấm là dữ liệu người dùng gõ):
+Nhập mã PIN: 2408
+Số tiền cần rút (0 để thoát): abc
+Dữ liệu không hợp lệ, vui lòng nhập lại
+Số tiền cần rút (0 để thoát): 1000000
+Rút thành công. Số dư: 4,000,000 đồng
+Số tiền cần rút (0 để thoát): 0
+Số giao dịch thành công: 1
+Số dư còn lại: 4,000,000 đồng`,
+brief:["PIN đúng là 2408; cho nhập tối đa 3 lần. Sai cả 3 lần thì khóa thẻ và kết thúc.","Số dư ban đầu là 5.000.000 đồng.","Sau khi PIN đúng, cho rút nhiều lần; nhập 0 để dừng.","Số tiền rút phải là bội số 50.000 và không vượt số dư.","In số dư sau mỗi lần rút thành công, số giao dịch và số dư cuối."],
+idea:"Dùng while cho tối đa 3 lần nhập PIN. Nếu đúng thì break. Sau đó dùng vòng lặp while True cho giao dịch; kiểm tra số tiền trước khi trừ số dư.",
+code:`pin_dung = "2408"
+so_du = 5000000
+so_lan_sai = 0
+so_giao_dich = 0
+
+while so_lan_sai < 3:
+    pin = input("Nhap ma PIN: ")
+    if pin == pin_dung:
+        break
+    so_lan_sai += 1
+    print("PIN khong dung!")
+
+if so_lan_sai == 3:
+    print("The da bi khoa!")
+else:
+    while True:
+        try:
+            tien = int(input("So tien can rut (0 de thoat): "))
+        except ValueError:
+            print("Du lieu khong hop le, vui long nhap lai")
+            continue
+
+        if tien == 0:
+            break
+        elif tien < 0:
+            print("So tien khong hop le")
+        elif tien % 50000 != 0:
+            print("So tien phai chia het cho 50000")
+        elif tien > so_du:
+            print("So du khong du")
+        else:
+            so_du -= tien
+            so_giao_dich += 1
+            print("Rut thanh cong. So du:",
+                  format(so_du, ",d"), "dong")
+
+    print("So giao dich thanh cong:", so_giao_dich)
+    print("So du con lai:", format(so_du, ",d"), "dong")`,
+inputs:"2408\n1000000\n0",files:null,
+guide:[["while so_lan_sai < 3","Lặp tối đa 3 lần nhập PIN sai."],["break","Thoát khỏi vòng lặp khi PIN đúng hoặc khi người dùng muốn dừng."],["continue","Bỏ qua phần còn lại của lượt lặp và quay lại nhập số tiền."],["tien % 50000 != 0","Kiểm tra số tiền có chia hết cho 50.000 hay không."],["so_du -= tien","Trừ số tiền rút khỏi tài khoản."],["so_giao_dich += 1","Chỉ tăng số giao dịch khi rút thành công."]],
+quiz:[["100.000 đồng có phải bội số 50.000?",["Có","Không"],0,"100.000 chia hết cho 50.000."],["Lệnh nào bỏ qua lượt lặp hiện tại?",["break","continue","pass"],1,"continue chuyển sang lượt lặp tiếp theo."]]
+},
+{
+title:"Tính tiền phạt trả sách muộn từ tệp",sub:"Câu 2 · Tính tiền phạt và tạo tệp kết quả",level:"ĐỌC TỆP · TÍNH TOÁN",
+statement:`CÂU 2 (5,0 điểm) – Tính tiền phạt trả sách muộn từ tệp
+
+Mỗi cuốn sách được mượn tối đa 14 ngày, quá hạn phạt 2.000 đồng/ngày. Tệp SachMuon.txt có mỗi dòng dạng MaSach;TenSach;SoNgayMuon (ví dụ S001;Lap trinh Python;10).
+
+Đọc tệp, in ra số cuốn quá hạn. Ghi các cuốn quá hạn vào tệp Phat.txt, mỗi cuốn một dòng gồm MaSach;TenSach;SoNgayQuaHan;TienPhat. Dòng cuối ghi Tong tien phat: S (S là tổng tiền phạt).
+
+Nếu không tìm thấy tệp SachMuon.txt, in thông báo rõ ràng và kết thúc chương trình.
+
+Ví dụ với tệp mẫu (rút gọn):
+[Màn hình]
+Số cuốn sách quá hạn: 4
+
+[Phat.txt]
+S002;Co so du lieu;6;12000
+S004;Dai so tuyen tinh;1;2000
+...
+Tong tien phat: 50000`,
+brief:["Mỗi dòng có dạng MaSach;TenSach;SoNgayMuon.","Mỗi cuốn được mượn tối đa 14 ngày; quá hạn phạt 2.000 đồng/ngày.","Ghi các sách quá hạn với số ngày quá hạn và tiền phạt vào Phat.txt.","Dòng cuối ghi tổng tiền phạt; không tìm thấy tệp thì thông báo và kết thúc."],
+idea:"Đọc từng dòng, tách thành 3 trường. Nếu số ngày mượn lớn hơn 14 thì tính số ngày quá hạn và tiền phạt. Cộng dồn tiền, lưu dòng kết quả rồi ghi ra Phat.txt.",
+code:`try:
+    f = open("SachMuon.txt", "r", encoding="utf-8")
+except FileNotFoundError:
+    print("Khong tim thay tep SachMuon.txt")
+    raise SystemExit
+
+ds_phat = []
+tong_phat = 0
+dem = 0
+
+for dong in f:
+    dong = dong.strip()
+    ma, ten, so_ngay = dong.split(";")
+    so_ngay = int(so_ngay)
+
+    if so_ngay > 14:
+        qua_han = so_ngay - 14
+        tien_phat = qua_han * 2000
+        tong_phat += tien_phat
+        dem += 1
+        ds_phat.append(
+            ma + ";" + ten + ";" +
+            str(qua_han) + ";" + str(tien_phat)
+        )
+
+f.close()
+print("So cuon sach qua han:", dem)
+
+f = open("Phat.txt", "w", encoding="utf-8")
+for sach in ds_phat:
+    f.write(sach + "\\n")
+f.write("Tong tien phat: " + str(tong_phat))
+f.close()`,
+inputs:"",files:{"SachMuon.txt":"S001;Lap trinh Python;10\nS002;Co so du lieu;20\nS003;Tin hoc;16\nS004;Dai so tuyen tinh;15"},
+guide:[["if so_ngay > 14","Chỉ sách mượn quá 14 ngày mới bị phạt."],["qua_han = so_ngay - 14","Tính số ngày vượt quá thời hạn."],["tien_phat = qua_han * 2000","Tính tiền phạt của một cuốn sách."],["tong_phat += tien_phat","Cộng dồn tiền phạt."],["ds_phat.append(...)","Lưu dòng thông tin sách quá hạn để ghi ra tệp."]],
+quiz:[["Mượn 20 ngày thì quá hạn mấy ngày?",["6 ngày","14 ngày","20 ngày"],0,"20 − 14 = 6 ngày."],["Tiền phạt 6 ngày là bao nhiêu?",["2.000 đồng","12.000 đồng","14.000 đồng"],1,"6 × 2.000 = 12.000 đồng."]]
+},
+{
+title:"Xếp loại học lực sinh viên",sub:"Câu 1 · Kiểm tra điểm và thống kê kết quả",level:"FOR · WHILE · IF / ELIF",
+statement:`CÂU 1 (5,0 điểm) – Xếp loại điểm học phần
+
+Viết chương trình nhập số lượng sinh viên. Nếu dữ liệu nhập vào không phải số nguyên hoặc số sinh viên nhỏ hơn hoặc bằng 0 thì thông báo dữ liệu không hợp lệ và yêu cầu nhập lại.
+
+Nhập điểm của từng sinh viên (điểm từ 0 đến 10). Nếu điểm nhập không hợp lệ thì yêu cầu nhập lại. Xếp loại học lực theo điểm:
+- Giỏi: điểm từ 8,0 trở lên.
+- Khá: từ 6,5 đến dưới 8,0.
+- Trung bình: từ 5,0 đến dưới 6,5.
+- Yếu: dưới 5,0.
+
+Thống kê số sinh viên từng loại và điểm trung bình của cả nhóm (2 chữ số thập phân).
+
+Ví dụ (giá trị sau dấu hai chấm là dữ liệu người dùng gõ):
+Số sinh viên: abc
+Dữ liệu không hợp lệ, vui lòng nhập lại!
+Số sinh viên: 2
+Điểm sinh viên 1: 8.5
+Xếp loại: Giỏi
+Điểm sinh viên 2: 6
+Xếp loại: Trung bình
+Giỏi: 1
+Khá: 0
+Trung bình: 1
+Yếu: 0
+Điểm trung bình: 7.25`,
+brief:["Nhập số lượng sinh viên; nếu không phải số nguyên dương thì yêu cầu nhập lại.","Nhập điểm từng sinh viên trong khoảng 0–10; dữ liệu sai thì nhập lại.","Xếp loại: Giỏi ≥ 8; Khá ≥ 6,5; Trung bình ≥ 5; còn lại là Yếu.","In số lượng từng loại và điểm trung bình với 2 chữ số thập phân."],
+idea:"Dùng while để kiểm tra số lượng và điểm hợp lệ. Dùng for để nhập từng sinh viên. Dùng if/elif/else để xếp loại; dùng bốn biến đếm và một biến tổng điểm.",
+code:`def nhap_so_nguyen_duong(thong_bao):
+    while True:
+        try:
+            n = int(input(thong_bao))
+            if n > 0:
+                return n
+        except ValueError:
+            pass
+        print("Du lieu khong hop le, vui long nhap lai!")
+
+
+n = nhap_so_nguyen_duong("So sinh vien: ")
+
+gioi = 0
+kha = 0
+trung_binh = 0
+yeu = 0
+tong_diem = 0
+
+for i in range(1, n + 1):
+    while True:
+        try:
+            diem = float(input("Diem sinh vien %d: " % i))
+            if 0 <= diem <= 10:
+                break
+        except ValueError:
+            pass
+        print("Diem khong hop le, vui long nhap lai!")
+
+    tong_diem += diem
+
+    if diem >= 8:
+        print("Xep loai: Gioi")
+        gioi += 1
+    elif diem >= 6.5:
+        print("Xep loai: Kha")
+        kha += 1
+    elif diem >= 5:
+        print("Xep loai: Trung binh")
+        trung_binh += 1
+    else:
+        print("Xep loai: Yeu")
+        yeu += 1
+
+print("Gioi:", gioi)
+print("Kha:", kha)
+print("Trung binh:", trung_binh)
+print("Yeu:", yeu)
+print("Diem trung binh: %.2f" % (tong_diem / n))`,
+inputs:"2\n8.5\n6",files:null,
+guide:[["while True","Lặp đến khi người dùng nhập dữ liệu hợp lệ."],["try / except ValueError","Bắt lỗi khi người dùng nhập chữ thay vì số."],["0 <= diem <= 10","Kiểm tra điểm nằm trong khoảng cho phép."],["if / elif / else","Xếp mỗi sinh viên vào một nhóm."],["tong_diem / n","Tính điểm trung bình của cả lớp."],["%.2f","Hiển thị số thực với 2 chữ số sau dấu phẩy."]],
+quiz:[["Điểm 7,5 xếp loại nào?",["Giỏi","Khá","Trung bình"],1,"7,5 nằm từ 6,5 đến dưới 8."],["Điểm 10,5 có hợp lệ không?",["Có","Không"],1,"Điểm phải từ 0 đến 10."]]
+},
+{
+title:"Thống kê điểm sinh viên từ tệp",sub:"Câu 2 · Tìm điểm cao nhất và lọc sinh viên đạt",level:"ĐỌC TỆP · MAX · GHI TỆP",
+statement:`CÂU 2 (5,0 điểm) – Thống kê điểm sinh viên từ tệp
+
+Tệp DiemSV.txt có mỗi dòng một sinh viên dạng MaSV;HoTen;Diem (ví dụ SV001;Nguyen Van An;8.5). Đọc tệp, in mã, họ tên, điểm của sinh viên có điểm cao nhất (không có hai người cùng điểm cao nhất).
+
+Ghi các sinh viên đạt (điểm từ 5,0) vào tệp DAT.txt, mỗi người một dòng giữ nguyên định dạng như tệp gốc; dòng cuối ghi Tong so: k (k là số sinh viên đạt).
+
+Nếu không tìm thấy tệp DiemSV.txt, in thông báo rõ ràng và kết thúc chương trình.
+
+Ví dụ với tệp mẫu (rút gọn):
+[Màn hình]
+Điểm cao nhất: SV004 - Pham Thi Dung - 9.2
+
+[DAT.txt]
+SV001;Nguyen Van An;8.5
+SV003;Le Van Cuong;7.0
+...
+Tong so: 7`,
+brief:["Mỗi dòng của DiemSV.txt có dạng MaSV;HoTen;Diem.","Tìm và in mã, họ tên, điểm của sinh viên có điểm cao nhất.","Ghi sinh viên đạt từ 5,0 vào DAT.txt, giữ nguyên định dạng dòng gốc.","Dòng cuối ghi Tong so: k; nếu không tìm thấy tệp thì thông báo và kết thúc."],
+idea:"Đặt max_diem nhỏ hơn mọi điểm hợp lệ. Khi gặp điểm lớn hơn, cập nhật điểm cao nhất, mã và tên. Đồng thời lọc các dòng có điểm từ 5 vào danh sách đạt.",
+code:`try:
+    f = open("DiemSV.txt", "r", encoding="utf-8")
+except FileNotFoundError:
+    print("Khong tim thay tep DiemSV.txt")
+    raise SystemExit
+
+max_diem = -1
+ma_max = ""
+ten_max = ""
+ds_dat = []
+
+for dong in f:
+    dong = dong.strip()
+    ma, ten, diem = dong.split(";")
+    diem = float(diem)
+
+    if diem > max_diem:
+        max_diem = diem
+        ma_max = ma
+        ten_max = ten
+
+    if diem >= 5:
+        ds_dat.append(dong)
+
+f.close()
+
+print("Diem cao nhat:", ma_max, "-", ten_max, "-", max_diem)
+
+f = open("DAT.txt", "w", encoding="utf-8")
+for sv in ds_dat:
+    f.write(sv + "\\n")
+f.write("Tong so: " + str(len(ds_dat)))
+f.close()`,
+inputs:"",files:{"DiemSV.txt":"SV001;Nguyen Van An;8.5\nSV002;Tran Thi Binh;4.0\nSV003;Le Van Cuong;7.0\nSV004;Pham Thi Dung;9.2"},
+guide:[["max_diem = -1","Điểm hợp lệ từ 0 đến 10 nên -1 là giá trị khởi đầu nhỏ hơn mọi điểm."],["if diem > max_diem","Nếu tìm thấy điểm cao hơn, cập nhật người đứng đầu."],["ma_max = ma; ten_max = ten","Lưu mã và họ tên đi cùng điểm cao nhất."],["if diem >= 5","Kiểm tra sinh viên đạt yêu cầu."],["len(ds_dat)","Đếm số sinh viên được ghi vào tệp DAT.txt."]],
+quiz:[["Điều kiện sinh viên đạt?",["diem > 5","diem >= 5","diem >= 8"],1,"Đề yêu cầu điểm từ 5,0, bao gồm cả 5,0."],["Tại sao đặt max_diem = -1?",["Để mọi điểm hợp lệ đều lớn hơn giá trị đầu","Vì điểm thấp nhất là -1","Để bỏ qua sinh viên đầu"],0,"Điểm hợp lệ không âm nên điểm đầu tiên sẽ lớn hơn -1."]]
+}
+];
+let current=0,done=new Set(),pyodide=null,editor=null;
+const $=id=>document.getElementById(id);
+function nav(){ $('lessonList').innerHTML=lessons.map((l,i)=>`<button class="lesson-nav ${i===current?'active':''} ${done.has(i)?'done':''}" data-i="${i}"><span class="lesson-no">${done.has(i)?'✓':String(i+1).padStart(2,'0')}</span><span class="lesson-name">${l.title}</span></button>`).join('');document.querySelectorAll('.lesson-nav').forEach(b=>b.onclick=()=>loadLesson(+b.dataset.i));$('progress').style.width=(done.size/6*100)+'%';$('progressText').textContent=`${done.size}/6 bài hoàn thành`;}
+function switchTab(name){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===name));}
+function loadLesson(i){current=i;let l=lessons[i];nav();$('crumb').textContent='Bài '+String(i+1).padStart(2,'0');$('lessonTitle').textContent=l.title;$('lessonSub').textContent=l.sub;$('level').textContent=l.level;$('filename').textContent='bai_'+String(i+1).padStart(2,'0')+'.py';
+$('problem').innerHTML=`<div class="paper"><h2>ĐỀ BÀI GỐC · ${l.sub.toUpperCase()}</h2><div style="white-space:pre-line;font-size:13px;line-height:1.8">${l.statement.replaceAll('&','&amp;').replaceAll('<','&lt;')}</div><div class="note"><b>Yêu cầu khi làm bài:</b> Đọc toàn bộ đề, xác định dữ liệu vào, kết quả cần in và tệp cần đọc/ghi. Không bỏ qua điều kiện nhập sai hoặc trường hợp không tìm thấy tệp.</div></div>`;
+$('guide').innerHTML=`<div class="paper"><h2>PHÂN TÍCH CÁCH LÀM</h2><p style="font-size:12px;color:#718096;margin:0 0 12px">${l.idea}</p>${l.guide.map((x,i)=>`<div class="guide-step"><b>${x[0]}</b><p>${x[1]}</p></div>`).join('')}</div>`;
+$('practice').innerHTML=`<div class="challenge"><h2>Checklist trước khi chạy</h2><p>Tự kiểm tra xem chương trình đã đáp ứng các yêu cầu của đề chưa.</p>${l.brief.map((x,i)=>`<label class="checkline"><input type="checkbox"> <span>${x}</span></label>`).join('')}<div class="note">Khi hoàn thành, chạy thử với dữ liệu mẫu ở nút <b>Dữ liệu mẫu</b> trong Terminal. Sau đó tự thay đổi dữ liệu để kiểm tra thêm.</div><button id="complete" style="margin-top:14px;background:#16865d;color:white;border-radius:7px;padding:9px 13px;font-size:12px;font-weight:700">✓ Đánh dấu đã hoàn thành</button></div>`;
+$('complete').onclick=()=>{done.add(current);nav();$('runStatus').textContent='Đã đánh dấu bài học hoàn thành';};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));switchTab('problem');editor.setValue(l.code);$('console').innerHTML='<span class="muted"># Code mẫu đã được nạp. Nhấn “Chạy Python” để thực thi.</span>'; $('runStatus').textContent='Python · Sẵn sàng';}
+async function runCode(){let l=lessons[current];$('run').disabled=true;$('runStatus').textContent='Đang chạy…';$('console').textContent='Đang khởi tạo Python…';try{if(!pyodide){pyodide=await loadPyodide();}let output='';pyodide.setStdout({batched:s=>output+=s});pyodide.setStderr({batched:s=>output+=s});if(l.files){for(let [name,content] of Object.entries(l.files)){pyodide.FS.writeFile('/'+name,content);}}
+let inputs=(l.inputs||'').split(/\r?\n/);let pre=`import builtins\n__inputs = ${JSON.stringify(inputs)}\n__input_pos = 0\ndef __input_demo(prompt=''):\n    global __input_pos\n    print(prompt, end='')\n    if __input_pos >= len(__inputs):\n        raise EOFError('Da het du lieu input mau.')\n    value = __inputs[__input_pos]\n    __input_pos += 1\n    print(value)\n    return value\nbuiltins.input = __input_demo\n`;
+try{await pyodide.runPythonAsync(pre+editor.getValue());}catch(e){output+='\\n'+e.message;}
+if(l.files){let outName=current===1?'CamThi.txt':current===3?'Phat.txt':'DAT.txt';try{let result=pyodide.FS.readFile('/'+outName,{encoding:'utf8'});output+=`\\n\\n--- ${outName} ---\\n`+result;}catch(e){output+='\\nChua tao duoc tep '+outName;}}
+$('console').textContent=output||'(Chương trình không in kết quả.)';$('runStatus').textContent='Python · Chạy xong';}catch(e){$('console').innerHTML='<span class="err">Không tải được Python runtime. Hãy kiểm tra kết nối Internet rồi thử lại.\\n'+e.message+'</span>';$('runStatus').textContent='Python · Có lỗi';}finally{$('run').disabled=false;}}
+$('run').onclick=runCode;$('reset').onclick=()=>{editor.setValue(lessons[current].code);$('runStatus').textContent='Đã khôi phục code mẫu';};$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(editor.getValue());$('runStatus').textContent='Đã sao chép code';}catch(e){$('runStatus').textContent='Hãy chọn code và nhấn Ctrl+C';}};$('clear').onclick=()=>$('console').textContent='# Terminal đã được xóa.';$('sample').onclick=()=>{let l=lessons[current];let s=l.files?Object.entries(l.files).map(([n,c])=>'['+n+']\\n'+c).join('\\n\\n'):'Dữ liệu nhập mẫu (mỗi dòng là một lần input):\\n'+l.inputs;$('console').textContent=s||'Bài này không có dữ liệu mẫu.';};
+editor=CodeMirror.fromTextArea($('code'),{mode:'python',theme:'material-darker',lineNumbers:true,indentUnit:4,tabSize:4,indentWithTabs:false,matchBrackets:true,autoCloseBrackets:true,lineWrapping:false});editor.setSize('100%','100%');editor.on('cursorActivity',()=>{$('lineCount').textContent='Ln '+(editor.getCursor().line+1)});nav();loadLesson(0);
+</script>
+</body></html>
